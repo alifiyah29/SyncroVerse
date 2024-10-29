@@ -1,4 +1,5 @@
 import React from 'react';
+import DocumentEditor from './DocumentEditor'; // Import the DocumentEditor
 
 const DashboardContent = () => {
   return (
@@ -7,6 +8,9 @@ const DashboardContent = () => {
       <div className="mt-4 bg-white p-4 shadow-md rounded">
         <p>No recent activity.</p>
       </div>
+      
+      {/* Add Document Editor here */}
+      <DocumentEditor />
     </div>
   );
 };
