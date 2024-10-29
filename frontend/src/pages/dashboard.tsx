@@ -1,17 +1,22 @@
 import React from 'react';
-import Layout from '../components/Layout';
-import DashboardSidebar from '../components/DashboardSidebar';
-import DashboardContent from '../components/DashboardContent';
+import DocumentEditor from '../components/DocumentEditor';
+import Chat from '../components/Chat';
+import { useSelector } from 'react-redux';
+import { RootState } from '../store/store'; 
 
-const Dashboard: React.FC = () => {
+const DashboardContent = () => {
+  const user = useSelector((state: RootState) => state.user);
+
   return (
-    <Layout>
-      <div className="flex min-h-screen bg-gray-50">
-        <DashboardSidebar />
-        <DashboardContent />
+    <div className="flex-1 p-4">
+      <h2 className="text-xl font-bold">User Activity</h2>
+      <div className="mt-4 bg-white p-4 shadow-md rounded">
+        <p>{user.name ? `${user.name}'s Activity` : 'No user logged in.'}</p>
       </div>
-    </Layout>
+      <DocumentEditor />
+      <Chat />
+    </div>
   );
 };
 
-export default Dashboard;
+export default DashboardContent;

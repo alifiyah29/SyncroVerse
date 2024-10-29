@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { sendMessage } from '../store/slices/chatSlice'; // Import sendMessage action
 
 const Chat = () => {
-  const [messages, setMessages] = useState([]);
+  const dispatch = useDispatch();
+  const messages = useSelector((state) => state.chat.messages); // Fetch chat messages from Redux state
   const [input, setInput] = useState('');
 
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (input.trim()) {
-      setMessages([...messages, { text: input, id: Date.now() }]);
+      dispatch(sendMessage(input)); // Dispatch action to send message
       setInput(''); // Clear input field
     }
   };
@@ -17,8 +20,8 @@ const Chat = () => {
       <h2 className="text-xl font-bold mb-4">Chat</h2>
       <div className="flex-1 overflow-y-auto mb-4">
         {messages.length > 0 ? (
-          messages.map((msg) => (
-            <div key={msg.id} className="p-2 border-b border-gray-200">
+          messages.map((msg, index) => (
+            <div key={index} className="p-2 border-b border-gray-200">
               {msg.text}
             </div>
           ))
