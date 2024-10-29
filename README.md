@@ -16,7 +16,15 @@ CollabConnect is a real-time collaborative workspace with role-based permissions
 
 Basic boilerplate code for Layout, Navbar, and pages has been created.
 
+## Authentication Pages
+- **Login Page**: Created a form for user login with email and password fields.
+- **Registration Page**: Developed a registration form for new users with name, email, and password fields.
+
+## Navigation
+- Updated Navbar to include links to the Login and Registration pages.
+
 ## Getting Started
 
-- **Install dependencies**: `npm install`
-- **Run the development server**: `npm run dev`
+1. Run `npm install` to install dependencies.
+2. Run `npm run dev` to start the development server.
+3. Navigate to `/login` or `/register` to access the authentication pages.
