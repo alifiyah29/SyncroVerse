@@ -5,12 +5,16 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 const session = require('express-session');
 const documentRoutes = require('./routes/document'); // Import document routes
+const http = require('http');
+const socketIo = require('socket.io');
 
 // Load environment variables and passport configuration
 dotenv.config();
 require('./config/passport');
 
 const app = express();
+const server = http.createServer(app); // Create HTTP server
+const io = socketIo(server); // Initialize Socket.io
 const PORT = process.env.PORT || 5000;
 
 // Middleware
@@ -19,7 +23,7 @@ app.use(express.json());
 
 // Set up session
 app.use(session({
-  secret: 'your-secret-key',
+  secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
 }));
@@ -49,6 +53,22 @@ app.get('/', (req, res) => {
   res.send('CollabConnect Backend is running');
 });
 
-app.listen(PORT, () => {
+// Socket.io connection
+io.on('connection', (socket) => {
+  console.log('A user connected');
+
+  // Handle document update events
+  socket.on('documentUpdated', (data) => {
+    // Broadcast the update to other connected clients
+    socket.broadcast.emit('documentUpdated', data);
+  });
+
+  socket.on('disconnect', () => {
+    console.log('User disconnected');
+  });
+});
+
+// Start the server
+server.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
