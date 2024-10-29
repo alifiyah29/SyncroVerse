@@ -6,7 +6,7 @@ import DashboardContent from '../components/DashboardContent';
 const Dashboard: React.FC = () => {
   return (
     <Layout>
-      <div className="flex">
+      <div className="flex min-h-screen bg-gray-50">
         <DashboardSidebar />
         <DashboardContent />
       </div>
