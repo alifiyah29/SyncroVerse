@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const passport = require('passport');
 const session = require('express-session');
+const documentRoutes = require('./routes/document'); // Import document routes
 
 // Load environment variables and passport configuration
 dotenv.config();
@@ -34,12 +35,14 @@ mongoose.connect(process.env.MONGO_URI)
 
 // OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-
 app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
     res.redirect('/'); // Redirect to frontend after successful login
   }
 );
+
+// Use document routes
+app.use('/api/documents', documentRoutes);
 
 // Sample route
 app.get('/', (req, res) => {
