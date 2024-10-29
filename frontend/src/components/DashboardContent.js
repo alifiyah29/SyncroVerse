@@ -1,5 +1,6 @@
 import React from 'react';
-import DocumentEditor from './DocumentEditor'; // Import the DocumentEditor
+import DocumentEditor from './DocumentEditor';
+import Chat from './Chat'; // Import the Chat component
 
 const DashboardContent = () => {
   return (
@@ -8,9 +9,14 @@ const DashboardContent = () => {
       <div className="mt-4 bg-white p-4 shadow-md rounded">
         <p>No recent activity.</p>
       </div>
-      
+
       {/* Add Document Editor here */}
       <DocumentEditor />
+
+      {/* Add Chat here */}
+      <div className="mt-4">
+        <Chat />
+      </div>
     </div>
   );
 };
