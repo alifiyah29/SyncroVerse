@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { saveDocument } from '../store/slices/documentSlice'; // Import saveDocument action
+import { addDocument } from '../store/slices/documentSlice'; 
 
 const DocumentEditor = () => {
   const dispatch = useDispatch();
@@ -9,7 +9,7 @@ const DocumentEditor = () => {
   const handleSaveDocument = (e) => {
     e.preventDefault();
     if (content.trim()) {
-      dispatch(saveDocument(content)); // Dispatch action to save document
+      dispatch(addDocument(content)); // Dispatch action to save document
       setContent(''); // Clear content field
     }
   };
