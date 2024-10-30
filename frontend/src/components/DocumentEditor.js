@@ -1,17 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addDocument } from '../store/slices/documentSlice';
-import socket from '../socket'; // Import Socket.io client
+import { io } from 'socket.io-client';
+
+const socket = io('http://localhost:5000'); // Ensure this matches your backend URL
 
 const DocumentEditor = ({ documentId }) => {
   const dispatch = useDispatch();
   const [content, setContent] = useState('');
 
   useEffect(() => {
-    // Listen for document updates
+    // Listen for document updates from other clients
     socket.on('documentUpdated', (updatedDocument) => {
       if (updatedDocument._id === documentId) {
-        setContent(updatedDocument.content); // Update content with the received document
+        setContent(updatedDocument.content); // Update content in editor
       }
     });
 
@@ -22,18 +24,18 @@ const DocumentEditor = ({ documentId }) => {
   }, [documentId]);
 
   const handleChange = (e) => {
-    const { value } = e.target;
-    setContent(value);
+    const newContent = e.target.value;
+    setContent(newContent);
 
-    // Emit the document update to the server
-    socket.emit('documentUpdated', { _id: documentId, content: value });
+    // Emit the document update to the server for real-time collaboration
+    socket.emit('editDocument', { _id: documentId, content: newContent });
   };
 
   const handleSaveDocument = (e) => {
     e.preventDefault();
     if (content.trim()) {
-      dispatch(addDocument(content)); // Dispatch action to save document
-      setContent(''); // Clear content field
+      dispatch(addDocument({ _id: documentId, content })); // Dispatch action to save document in Redux
+      // Optionally clear content or display a save confirmation
     }
   };
 
