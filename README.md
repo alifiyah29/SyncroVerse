@@ -2,7 +2,7 @@
 
 ## Project Overview
 
-**CollabConnect** is a real-time collaborative platform designed to allow multiple users to simultaneously edit shared documents with minimal latency. It supports real-time chat, role-based permissions, secure Google OAuth-based authentication, document versioning, and autosave functionalities. CollabConnect is designed for collaborative workflows, offering an intuitive interface with responsive layouts for document management and communication.
+**SyncroVerse** is a real-time collaborative platform designed to allow multiple users to simultaneously edit shared documents with minimal latency. It supports real-time chat, role-based permissions, secure Google OAuth-based authentication, document versioning, and autosave functionalities. SyncroVerse is designed for collaborative workflows, offering an intuitive interface with responsive layouts for document management and communication.
 
 ## Features
 
@@ -89,7 +89,7 @@ Ensure you have the following installed:
      ```
 
 5. **Accessing the App**
-   - Once both servers are running, open [http://localhost:3000](http://localhost:3000) in your browser to access CollabConnect.
+   - Once both servers are running, open [http://localhost:3000](http://localhost:3000) in your browser to access SyncroVerse.
 
 ### Additional Setup for Cloud Hosting
 

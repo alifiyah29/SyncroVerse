@@ -5,7 +5,7 @@ const Home: React.FC = () => {
   return (
     <Layout>
       <div className="container mx-auto">
-        <h1 className="text-2xl font-bold">Welcome to CollabConnect</h1>
+        <h1 className="text-2xl font-bold">Welcome to SyncroVerse</h1>
       </div>
     </Layout>
   );
