@@ -1,4 +1,4 @@
-# CollabConnect - Real-Time Collaborative Workspace
+# SyncroVerse - Real-Time Collaborative Workspace
 
 ## Project Overview
 **CollabConnect** is a real-time collaborative platform designed to allow multiple users to simultaneously edit shared documents with minimal latency. It supports real-time chat, role-based permissions, secure Google OAuth-based authentication, document versioning, and autosave functionalities. CollabConnect is designed for collaborative workflows, offering an intuitive interface with responsive layouts for document management and communication.
@@ -39,7 +39,7 @@ Ensure you have the following installed:
 ### Installation
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/CollabConnect.git
+   git clone https://github.com/alifiyah29/CollabConnect.git
    cd CollabConnect
    ```
 
