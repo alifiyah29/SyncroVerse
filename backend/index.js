@@ -4,9 +4,9 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const passport = require('passport');
 const session = require('express-session');
-const documentRoutes = require('./routes/document'); // Import document routes
+const documentRoutes = require('./routes/document');
 const http = require('http');
-const socketIo = require('socket.io');
+const { init } = require('./socket'); // Import `init` from socket.js
 
 // Load environment variables and passport configuration
 dotenv.config();
@@ -14,21 +14,19 @@ require('./config/passport');
 
 const app = express();
 const server = http.createServer(app); // Create HTTP server
-const io = socketIo(server); // Initialize Socket.io
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// Middleware setup
 app.use(cors());
 app.use(express.json());
 
-// Set up session
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: true,
+  saveUninitialized: false,
+  cookie: { secure: process.env.NODE_ENV === 'production' }
 }));
 
-// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -39,11 +37,10 @@ mongoose.connect(process.env.MONGO_URI)
 
 // OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
-app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    res.redirect('/'); // Redirect to frontend after successful login
-  }
-);
+
+app.get('/auth/google/callback', passport.authenticate('google', { failureRedirect: '/' }), (req, res) => {
+  res.redirect('http://localhost:3000/dashboard'); // Redirect to the dashboard after successful login
+});
 
 // Use document routes
 app.use('/api/documents', documentRoutes);
@@ -53,20 +50,8 @@ app.get('/', (req, res) => {
   res.send('CollabConnect Backend is running');
 });
 
-// Socket.io connection
-io.on('connection', (socket) => {
-  console.log('A user connected');
-
-  // Handle document update events
-  socket.on('documentUpdated', (data) => {
-    // Broadcast the update to other connected clients
-    socket.broadcast.emit('documentUpdated', data);
-  });
-
-  socket.on('disconnect', () => {
-    console.log('User disconnected');
-  });
-});
+// Initialize Socket.io with the server
+init(server);
 
 // Start the server
 server.listen(PORT, () => {

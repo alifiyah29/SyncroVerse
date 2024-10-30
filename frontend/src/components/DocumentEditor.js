@@ -1,10 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addDocument } from '../store/slices/documentSlice'; 
+import { addDocument } from '../store/slices/documentSlice';
+import socket from '../socket'; // Import Socket.io client
 
-const DocumentEditor = () => {
+const DocumentEditor = ({ documentId }) => {
   const dispatch = useDispatch();
-  const [content, setContent] = useState('');;
+  const [content, setContent] = useState('');
+
+  useEffect(() => {
+    // Listen for document updates
+    socket.on('documentUpdated', (updatedDocument) => {
+      if (updatedDocument._id === documentId) {
+        setContent(updatedDocument.content); // Update content with the received document
+      }
+    });
+
+    // Clean up the socket listener on unmount
+    return () => {
+      socket.off('documentUpdated');
+    };
+  }, [documentId]);
+
+  const handleChange = (e) => {
+    const { value } = e.target;
+    setContent(value);
+
+    // Emit the document update to the server
+    socket.emit('documentUpdated', { _id: documentId, content: value });
+  };
 
   const handleSaveDocument = (e) => {
     e.preventDefault();
@@ -20,7 +43,7 @@ const DocumentEditor = () => {
       <form onSubmit={handleSaveDocument}>
         <textarea
           value={content}
-          onChange={(e) => setContent(e.target.value)}
+          onChange={handleChange}
           className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
           rows="10"
           placeholder="Write your document here..."
