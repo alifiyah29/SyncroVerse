@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+// Chat.js
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { sendMessage } from '../store/slices/chatSlice'; // Import sendMessage action
+import { sendMessage, receiveMessage } from '../store/slices/chatSlice'; // Import receiveMessage action
+import socket from '../socket'; // Import the socket instance
 
 const Chat = () => {
   const dispatch = useDispatch();
-  const messages = useSelector((state) => state.chat.messages); // Fetch chat messages from Redux state
+  const messages = useSelector((state) => state.chat.messages);
   const [input, setInput] = useState('');
+
+  useEffect(() => {
+    socket.on('messageReceived', (message) => {
+      dispatch(receiveMessage(message));
+    });
+
+    return () => {
+      socket.off('messageReceived');
+    };
+  }, [dispatch]);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (input.trim()) {
-      dispatch(sendMessage(input)); // Dispatch action to send message
-      setInput(''); // Clear input field
+      socket.emit('sendMessage', input);
+      dispatch(sendMessage(input));
+      setInput('');
     }
   };
 
@@ -22,7 +35,7 @@ const Chat = () => {
         {messages.length > 0 ? (
           messages.map((msg, index) => (
             <div key={index} className="p-2 border-b border-gray-200">
-              {msg.text}
+              {msg.text || msg}
             </div>
           ))
         ) : (

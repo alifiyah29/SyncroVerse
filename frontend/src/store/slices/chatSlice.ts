@@ -15,12 +15,15 @@ const chatSlice = createSlice({
     sendMessage(state, action: PayloadAction<string>) {
       state.messages.push(action.payload);
     },
+    receiveMessage(state, action: PayloadAction<string>) {
+      state.messages.push(action.payload); // Adds the new message to messages array
+    },
     clearMessages(state) {
       state.messages = [];
     },
   },
 });
 
-export const { sendMessage, clearMessages } = chatSlice.actions;
+export const { sendMessage, receiveMessage, clearMessages } = chatSlice.actions;
 export default chatSlice.reducer;
 export type RootState = ChatState; // Export the state type
